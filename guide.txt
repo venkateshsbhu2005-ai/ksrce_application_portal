@@ -1,0 +1,41 @@
+KSRCE Application Portal - Deployment Guide (Supabase, Render, Vercel)
+====================================================================
+
+### Step 1: Push to GitHub
+Make sure all your latest changes (including the Dockerfile for the backend) are committed and pushed to your GitHub repository.
+
+### Step 2: Create the Database (Supabase)
+1. Go to your Supabase Dashboard (https://supabase.com/dashboard) and click "New project".
+2. Select your organization, give it a name, generate a strong Database Password (save this!), and select a region closest to your users. Click "Create new project".
+3. Once the database is provisioned, go to "Project Settings" (gear icon) -> "Database".
+4. Scroll down to "Connection parameters" and select the "URI" or "JDBC" tab (since we're using Spring Boot, JDBC is often preferred for `SPRING_DATASOURCE_URL`, but standard URI works if your config parses it). 
+5. Copy the connection string. Make sure to replace `[YOUR-PASSWORD]` with the password you generated.
+
+### Step 3: Deploy the Backend (Render)
+1. In the Render Dashboard (https://dashboard.render.com/), click "New +" -> "Web Service".
+2. Connect your GitHub repository.
+3. Set the "Root Directory" to `backend`.
+4. Render should automatically detect your Dockerfile and set the Environment to "Docker".
+5. Scroll down to "Environment Variables" and add the following:
+   - DB_URL: (Paste the JDBC or URI connection string from Supabase)
+   - DB_USERNAME: `postgres` (or your Supabase DB user)
+   - DB_PASSWORD: (Paste your Supabase DB password)
+   - JWT_SECRET: (Generate a long, random string for security)
+   - ALLOWED_ORIGINS: `*` (We will change this to the Vercel URL later for security!)
+6. Click "Create Web Service". Wait a few minutes for it to build and deploy. Once live, copy your backend's URL (e.g., https://ksrce-backend.onrender.com).
+
+### Step 4: Deploy the Frontend (Vercel)
+1. Go to the Vercel Dashboard (https://vercel.com/dashboard) and click "Add New..." -> "Project".
+2. Import the same GitHub repository.
+3. Click "Edit" on the "Root Directory" and select the `frontend` folder.
+4. Vercel should auto-detect "Vite" as the Framework Preset.
+5. Expand "Environment Variables" and add:
+   - VITE_API_BASE_URL: (Paste your backend URL from Step 3, e.g., https://ksrce-backend.onrender.com/api)
+6. Click "Deploy". Vercel will automatically run `npm install` and `npm run build`, and handle the routing for your React app.
+7. Once deployment is complete, copy your new Vercel frontend URL.
+
+### Step 5: Secure Your Backend (CORS)
+1. Go back to your Backend Web Service on Render -> "Environment Variables".
+2. Change the ALLOWED_ORIGINS variable from `*` to your new Vercel frontend URL (e.g., https://ksrce-portal.vercel.app).
+3. Save the changes. Your backend will automatically restart with the new security settings.
+
