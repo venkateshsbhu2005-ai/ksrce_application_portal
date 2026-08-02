@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a; /* Deep Blue */
+
+  --color-secondary-500: #6366f1; /* Indigo */
+  --color-secondary-600: #4f46e5;
+
+  --color-accent-500: #10b981; /* Emerald */
+  --color-accent-600: #059669;
+
+  --color-danger-500: #ef4444; /* Red */
+  --color-danger-600: #dc2626;
+
+  --color-warning-500: #f59e0b; /* Amber */
+  --color-warning-600: #d97706;
+
+  --color-background-light: #f8fafc;
+  --color-background-card: #ffffff;
+
+  --color-dark-bg: #0f172a; /* Slate 900 */
+  --color-dark-card: #1e293b; /* Slate 800 */
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: var(--color-background-light);
+    --foreground: var(--color-slate-900);
+    --card: var(--color-background-card);
+    --card-foreground: var(--color-slate-900);
+  }
+  
+  .dark {
+    --background: var(--color-dark-bg);
+    --foreground: var(--color-slate-50);
+    --card: var(--color-dark-card);
+    --card-foreground: var(--color-slate-50);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+}
